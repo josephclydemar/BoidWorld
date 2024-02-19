@@ -1,4 +1,5 @@
 import pygame
+import boids
 
 pygame.init()
 
@@ -8,6 +9,7 @@ WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
 if __name__ == '__main__':
+    myBoids = [boids.Boid((WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame) for _ in range(50)]
     run = True
     while run:
         for event in pygame.event.get():
@@ -15,4 +17,6 @@ if __name__ == '__main__':
                 if event.key == pygame.K_ESCAPE:
                     run = False
         WINDOW.fill((0, 0, 0))
+        for boid in myBoids:
+            boid.draw()
         pygame.display.update()
