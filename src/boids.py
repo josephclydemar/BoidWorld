@@ -12,6 +12,9 @@ class Boid:
         self.window = window
         self.environment_size = environment_size
 
+        self.cohesion_radius = random.uniform(50, 60)
+        self.alignment_radius = random.uniform(30, 40)
+        self.separation_radius = random.uniform(10, 20)
         self.speed_scalar = random.uniform(1,3)
         self.direction_radian = 0
         self.position = [
@@ -27,6 +30,7 @@ class Boid:
         return [new_position[0], self.environment_size[1]-new_position[1]]
 
     """
+    Move the Boid incrementally towards the passed position.
         @destination_position
     """
     def move(self, destination_position):
@@ -39,3 +43,12 @@ class Boid:
 
         self.position = [self.position[0]+x_movement, self.position[1]+y_movement]
         self.drawable_position = self.update_drawable_position(self.position)
+    
+    def align(self):
+        pass
+
+    def separate(self):
+        pass
+
+    def cohere(self):
+        pass
