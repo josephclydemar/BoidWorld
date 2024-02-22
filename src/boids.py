@@ -16,7 +16,7 @@ class Boid:
         self.cohesion_radius = random.uniform(50, 60)
         self.alignment_radius = random.uniform(30, 40)
         self.separation_radius = random.uniform(10, 20)
-        self.speed_scalar = random.uniform(1,3)
+        self.speed_scalar = random.uniform(1,2)
         self.direction_degrees = 0
         self.position = [
             random.randint(10, self.environment_size[0]-10),
@@ -43,21 +43,26 @@ class Boid:
 
     """
     Move the Boid incrementally towards the destination position.
-    @destination_position
+    @dest_position
     """
-    def move(self, destination_position):
-        # Angle of the Boid when facing @position
-        # self.direction_degrees = (180 / math.pi) * math.atan2(destination_position[1]-self.position[1], destination_position[0]-self.position[0])
-        # # Incremental X axis and Y axis movement of the Boid towards @position
-        # x_movement = self.speed_scalar * math.cos(self.direction_degrees)
-        # y_movement = self.speed_scalar * math.sin(self.direction_degrees)
-        # print('angle->',(180/math.pi) * self.direction_degrees, ' movement->', (x_movement, y_movement))
+    def move(self, dest_position):
+        desired_direction_degrees = (180 / math.pi) * math.atan2(dest_position[1]-self.position[1], dest_position[0]-self.position[0])
+        self.steer(desired_direction_degrees)
+        x_increment = self.speed_scalar * math.cos(self.direction_degrees * (math.pi / 180))
+        y_increment = self.speed_scalar * math.sin(self.direction_degrees * (math.pi / 180))
 
-        # self.position = [self.position[0]+x_movement, self.position[1]+y_movement]
-        self.direction_degrees += 1
+        self.position = [self.position[0]+x_increment, self.position[1]+y_increment]
+        self.avoid_edge()
         if self.direction_degrees >= 360:
             self.direction_degrees = 0
         self.drawable_position = self.calc_drawable(self.direction_degrees * (math.pi / 180), self.position)
+    
+    def steer(self, dest_direction_degrees):
+        if self.direction_degrees > dest_direction_degrees + 10:
+            self.direction_degrees -= 1
+        elif self.direction_degrees < dest_direction_degrees - 10:
+            self.direction_degrees += 1
+
     
     def align(self):
         pass
@@ -69,4 +74,12 @@ class Boid:
         pass
 
     def avoid_edge(self):
-        pass
+        if self.position[0] < 10:
+            self.direction_degrees += 180
+        elif self.position[0] > self.environment_size[0] - 10:
+            self.direction_degrees += 180
+        
+        if self.position[1] < 10:
+            self.direction_degrees += 180
+        elif self.position[1] > self.environment_size[1] - 10:
+            self.direction_degrees += 180
