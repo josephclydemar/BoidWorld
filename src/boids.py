@@ -4,28 +4,33 @@ import math
 class Boid:
     """
     Initialize the Boid
-    @environment_size
+    @window_size
     @window
     @graphics_lib
     """
-    def __init__(self, environment_size, window, graphics_lib):
+    def __init__(self, window_size, window, graphics_lib):
         self.graphics_lib = graphics_lib
         self.window = window
-        self.environment_size = environment_size
+        self.window_size = window_size
+
+        self.color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
 
         self.cohesion_radius = random.uniform(50, 60)
         self.alignment_radius = random.uniform(30, 40)
         self.separation_radius = random.uniform(10, 20)
+
         self.speed_scalar = random.uniform(1,2)
         self.direction_degrees = 0
         self.position = [
-            random.randint(10, self.environment_size[0]-10),
-            random.randint(10, self.environment_size[1]-10),
+            random.randint(10, self.window_size[0]-10),
+            random.randint(10, self.window_size[1]-10),
         ]
         self.drawable_position = self.calc_drawable(self.direction_degrees * (math.pi / 180), self.position)
+        
+        self.my_neigbors = None
     
     def draw(self):
-        self.graphics_lib.draw.polygon(self.window, (200, 200, 0), self.drawable_position)
+        self.graphics_lib.draw.polygon(self.window, self.color, self.drawable_position)
         # self.graphics_lib.draw.rect(self.window, (200, 200, 0), (self.drawable_position[0], self.drawable_position[1], 5, 5))
     
     """
@@ -35,10 +40,10 @@ class Boid:
     """
     def calc_drawable(self, new_direction_radian, new_position):
         return (
-                (new_position[0], self.environment_size[1] - new_position[1]),
-                (new_position[0] + 8 * math.cos(new_direction_radian + 120 * (math.pi / 180)), self.environment_size[1] - (new_position[1] + 8 * math.sin(new_direction_radian + 120 * (math.pi / 180)))),
-                (new_position[0] + 15 * math.cos(new_direction_radian), self.environment_size[1] - (new_position[1] + 15 * math.sin(new_direction_radian))),
-                (new_position[0] + 8 * math.cos(new_direction_radian - 120 * (math.pi / 180)), self.environment_size[1] - (new_position[1] + 8 * math.sin(new_direction_radian - 120 * (math.pi / 180)))),
+                (new_position[0], self.window_size[1] - new_position[1]),
+                (new_position[0] + 8 * math.cos(new_direction_radian + 120 * (math.pi / 180)), self.window_size[1] - (new_position[1] + 8 * math.sin(new_direction_radian + 120 * (math.pi / 180)))),
+                (new_position[0] + 15 * math.cos(new_direction_radian), self.window_size[1] - (new_position[1] + 15 * math.sin(new_direction_radian))),
+                (new_position[0] + 8 * math.cos(new_direction_radian - 120 * (math.pi / 180)), self.window_size[1] - (new_position[1] + 8 * math.sin(new_direction_radian - 120 * (math.pi / 180)))),
                )
 
     """
@@ -64,6 +69,10 @@ class Boid:
             self.direction_degrees += 1
 
     
+    def get_neigbors(self, others):
+        print(self.position, ' -> ', others)
+        self.my_neigbors = others
+    
     def align(self):
         pass
 
@@ -76,10 +85,17 @@ class Boid:
     def avoid_edge(self):
         if self.position[0] < 10:
             self.direction_degrees += 180
-        elif self.position[0] > self.environment_size[0] - 10:
+        elif self.position[0] > self.window_size[0] - 10:
             self.direction_degrees += 180
         
         if self.position[1] < 10:
             self.direction_degrees += 180
-        elif self.position[1] > self.environment_size[1] - 10:
+        elif self.position[1] > self.window_size[1] - 10:
             self.direction_degrees += 180
+        
+        if self.position[0] < -20 or self.position[0] > self.window_size[0] + 20:
+            # self.position[0] = random.randint(100, self.window_size[0]-100)
+            self.position[0] = 550
+        if self.position[1] < -20 or self.position[1] > self.window_size[1] + 20:
+            # self.position[1] = random.randint(100, self.window_size[1]-100)
+            self.position[1] = 300

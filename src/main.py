@@ -9,7 +9,9 @@ WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 CLOCK = pygame.time.Clock()
 
 if __name__ == '__main__':
-    myBoids = [boids.Boid((WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame) for _ in range(5000)]
+    myBoids = [boids.Boid((WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame) for _ in range(50)]
+    for boid in myBoids:
+        boid.get_neigbors(list(map(lambda b: b.position, list(filter(lambda b: b != boid, myBoids)))))
     run = True
     while run:
         for event in pygame.event.get():
@@ -21,4 +23,4 @@ if __name__ == '__main__':
             boid.draw()
             boid.move((500, 300))
         pygame.display.update()
-        CLOCK.tick(120)
+        CLOCK.tick(60)
