@@ -27,7 +27,7 @@ if __name__ == '__main__':
                             WINDOW,
                             pygame,
                             show_circles=False
-                        ) for _ in range(10)]
+                        ) for _ in range(100)]
     for boid in myBoids:
         boid.get_neigbors(list(map(lambda b: b.position, list(filter(lambda b: b != boid, myBoids)))))
     run = True

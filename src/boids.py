@@ -53,11 +53,11 @@ class Boid:
                 (self.position[0] + 15 * math.cos(new_direction_radian), self.window_size[1] - (self.position[1] + 15 * math.sin(new_direction_radian))),
                 (self.position[0] + 8 * math.cos(new_direction_radian - 120 * (math.pi / 180)), self.window_size[1] - (self.position[1] + 8 * math.sin(new_direction_radian - 120 * (math.pi / 180)))),
                )
-        self.tail.append(drawable_position[0])
-        if len(self.tail) > 6:
-            self.tail.remove(self.tail[0])
-        if len(self.tail) > 2:
-            self.graphics_lib.draw.lines(self.window, self.color, False, self.tail, 1)
+        # self.tail.append(drawable_position[0])
+        # if len(self.tail) > 4:
+        #     self.tail.remove(self.tail[0])
+        # if len(self.tail) > 2:
+        #     self.graphics_lib.draw.lines(self.window, self.color, False, self.tail, 1)
         if self.show_circles:
             self.graphics_lib.draw.circle(self.window, self.cohesion_circle_color, drawable_position[0], self.cohesion_radius, 1)
             self.graphics_lib.draw.circle(self.window, self.alignment_circle_color, drawable_position[0], self.alignment_radius, 1)
@@ -90,11 +90,20 @@ class Boid:
         # self.direction_degrees += steering_speed
         if self.direction_degrees > dest_direction_degrees + 10:
             # self.direction_degrees -= steering_speed
-            self.direction_degrees -= 1
+            self.direction_degrees -= 2
         elif self.direction_degrees < dest_direction_degrees - 10:
             # self.direction_degrees += steering_speed
-            self.direction_degrees += 1
+            self.direction_degrees += 2
     
+
+    def cohere_burst(self):
+        self.speed_scalar = self.cohesion_burst_speed
+    
+
+    def relax(self):
+        self.speed_scalar = self.relaxed_speed
+    
+
     def avoid_edge(self):
         if self.position[0] < 10:
             self.direction_degrees += 180
@@ -152,10 +161,10 @@ class Boid:
                     total_xy[0]/len(self.my_neigbors_pos),
                     total_xy[1]/len(self.my_neigbors_pos),
                 )
-            self.speed_scalar = self.cohesion_burst_speed
+            self.cohere_burst()
             self.move(average_close_neigbors_position)
         else:
             my_pos = self.graphics_lib.mouse.get_pos()
             my_pos = (my_pos[0], self.window_size[1]-my_pos[1])
-            self.speed_scalar = self.relaxed_speed
+            self.relax()
             self.move(my_pos)
