@@ -18,21 +18,23 @@ class Boid:
         self.show_circles = show_circles
 
         self.color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+
+        self.dt = 1
         
 
-        self.cohesion_radius = random.uniform(50, 60)
+        self.cohesion_radius = random.uniform(95, 105)
         self.cohesion_burst_speed = random.uniform(5, 7)
         self.cohesion_circle_color = (self.color[0], self.color[1], self.color[2])
 
-        self.alignment_radius = random.uniform(30, 40)
+        self.alignment_radius = random.uniform(65, 75)
         self.alignment_burst_speed = random.uniform(10, 15)
         self.alignment_circle_color = (self.color[0], self.color[1], self.color[2])
 
-        self.separation_radius = random.uniform(10, 20)
+        self.separation_radius = random.uniform(25, 35)
         self.separation_burst_speed = random.uniform(30, 40)
         self.separation_circle_color = (self.color[0], self.color[1], self.color[2])
 
-        self.relaxed_speed = random.uniform(1, 2)
+        self.relaxed_speed = random.uniform(1, 3)
         self.speed_scalar = self.relaxed_speed
         self.direction_degrees = random.uniform(0, 359)
         self.position = position
@@ -40,9 +42,13 @@ class Boid:
         
         self.my_neigbors_pos = None
     
-    def draw(self):
+    def draw(self, fps):
+        if fps > 0:
+            self.dt = 60 / fps
         if self.show_circles:
             self.graphics_lib.draw.circle(self.window, self.cohesion_circle_color, self.drawable_position[0], self.cohesion_radius, 1)
+            self.graphics_lib.draw.circle(self.window, self.alignment_circle_color, self.drawable_position[0], self.alignment_radius, 1)
+            self.graphics_lib.draw.circle(self.window, self.separation_circle_color, self.drawable_position[0], self.separation_radius, 1)
         self.graphics_lib.draw.polygon(self.window, self.color, self.drawable_position)
         self.cohere()
     
@@ -66,8 +72,8 @@ class Boid:
     def move(self, dest_position):
         desired_direction_degrees = (180 / math.pi) * math.atan2(dest_position[1]-self.position[1], dest_position[0]-self.position[0])
         self.steer(desired_direction_degrees)
-        x_increment = self.speed_scalar * math.cos(self.direction_degrees * (math.pi / 180))
-        y_increment = self.speed_scalar * math.sin(self.direction_degrees * (math.pi / 180))
+        x_increment = self.dt * self.speed_scalar * math.cos(self.direction_degrees * (math.pi / 180))
+        y_increment = self.dt * self.speed_scalar * math.sin(self.direction_degrees * (math.pi / 180))
 
         self.position = [self.position[0]+x_increment, self.position[1]+y_increment]
         self.avoid_edge()
