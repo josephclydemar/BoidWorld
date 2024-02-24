@@ -39,6 +39,8 @@ class Boid:
         self.direction_degrees = random.uniform(0, 359)
         self.position = position
 
+        self.tail = []
+
         self.my_neigbors_pos = None
     
     def draw(self, fps):
@@ -51,12 +53,17 @@ class Boid:
                 (self.position[0] + 15 * math.cos(new_direction_radian), self.window_size[1] - (self.position[1] + 15 * math.sin(new_direction_radian))),
                 (self.position[0] + 8 * math.cos(new_direction_radian - 120 * (math.pi / 180)), self.window_size[1] - (self.position[1] + 8 * math.sin(new_direction_radian - 120 * (math.pi / 180)))),
                )
+        self.tail.append(drawable_position[0])
+        if len(self.tail) > 6:
+            self.tail.remove(self.tail[0])
+        if len(self.tail) > 2:
+            self.graphics_lib.draw.lines(self.window, self.color, False, self.tail, 1)
         if self.show_circles:
             self.graphics_lib.draw.circle(self.window, self.cohesion_circle_color, drawable_position[0], self.cohesion_radius, 1)
             self.graphics_lib.draw.circle(self.window, self.alignment_circle_color, drawable_position[0], self.alignment_radius, 1)
             self.graphics_lib.draw.circle(self.window, self.separation_circle_color, drawable_position[0], self.separation_radius, 1)
         self.graphics_lib.draw.polygon(self.window, self.color, drawable_position)
-        self.cohere()
+        # self.cohere()
 
 
     """
