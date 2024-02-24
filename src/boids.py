@@ -38,32 +38,26 @@ class Boid:
         self.speed_scalar = self.relaxed_speed
         self.direction_degrees = random.uniform(0, 359)
         self.position = position
-        self.drawable_position = self.calc_drawable(self.direction_degrees * (math.pi / 180), self.position)
-        
+
         self.my_neigbors_pos = None
     
     def draw(self, fps):
         if fps > 0:
             self.dt = 60 / fps
-        if self.show_circles:
-            self.graphics_lib.draw.circle(self.window, self.cohesion_circle_color, self.drawable_position[0], self.cohesion_radius, 1)
-            self.graphics_lib.draw.circle(self.window, self.alignment_circle_color, self.drawable_position[0], self.alignment_radius, 1)
-            self.graphics_lib.draw.circle(self.window, self.separation_circle_color, self.drawable_position[0], self.separation_radius, 1)
-        self.graphics_lib.draw.polygon(self.window, self.color, self.drawable_position)
-        self.cohere()
-    
-    """
-    * Calculates the coordinates of each corners of the body of the Boid
-    @new_direction_radian
-    @new_position
-    """
-    def calc_drawable(self, new_direction_radian, new_position):
-        return (
-                (new_position[0], self.window_size[1] - new_position[1]),
-                (new_position[0] + 8 * math.cos(new_direction_radian + 120 * (math.pi / 180)), self.window_size[1] - (new_position[1] + 8 * math.sin(new_direction_radian + 120 * (math.pi / 180)))),
-                (new_position[0] + 15 * math.cos(new_direction_radian), self.window_size[1] - (new_position[1] + 15 * math.sin(new_direction_radian))),
-                (new_position[0] + 8 * math.cos(new_direction_radian - 120 * (math.pi / 180)), self.window_size[1] - (new_position[1] + 8 * math.sin(new_direction_radian - 120 * (math.pi / 180)))),
+        new_direction_radian = (math.pi / 180) * self.direction_degrees
+        drawable_position = (
+                (self.position[0], self.window_size[1] - self.position[1]),
+                (self.position[0] + 8 * math.cos(new_direction_radian + 120 * (math.pi / 180)), self.window_size[1] - (self.position[1] + 8 * math.sin(new_direction_radian + 120 * (math.pi / 180)))),
+                (self.position[0] + 15 * math.cos(new_direction_radian), self.window_size[1] - (self.position[1] + 15 * math.sin(new_direction_radian))),
+                (self.position[0] + 8 * math.cos(new_direction_radian - 120 * (math.pi / 180)), self.window_size[1] - (self.position[1] + 8 * math.sin(new_direction_radian - 120 * (math.pi / 180)))),
                )
+        if self.show_circles:
+            self.graphics_lib.draw.circle(self.window, self.cohesion_circle_color, drawable_position[0], self.cohesion_radius, 1)
+            self.graphics_lib.draw.circle(self.window, self.alignment_circle_color, drawable_position[0], self.alignment_radius, 1)
+            self.graphics_lib.draw.circle(self.window, self.separation_circle_color, drawable_position[0], self.separation_radius, 1)
+        self.graphics_lib.draw.polygon(self.window, self.color, drawable_position)
+        self.cohere()
+
 
     """
     * Moves the Boid incrementally towards the destination position.
@@ -79,7 +73,6 @@ class Boid:
         self.avoid_edge()
         if self.direction_degrees >= 360:
             self.direction_degrees = self.direction_degrees - 360
-        self.drawable_position = self.calc_drawable(self.direction_degrees * (math.pi / 180), self.position)
     
     """
     * Steers the Boid towards a particular angle/direction
