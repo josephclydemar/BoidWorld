@@ -117,13 +117,17 @@ class Boid:
 
     def avoid_edge(self):
         if self.position[0] < 10:
+            self.position[0] = 11
             self.direction_degrees += 180
         elif self.position[0] > self.window_size[0] - 10:
+            self.position[0] = self.window_size[0] - 11
             self.direction_degrees += 180
         
         if self.position[1] < 10:
+            self.position[1] = 11
             self.direction_degrees += 180
         elif self.position[1] > self.window_size[1] - 10:
+            self.position[1] = self.window_size[1] - 11
             self.direction_degrees += 180
         
         if self.position[0] < -20 or self.position[0] > self.window_size[0] + 20:
