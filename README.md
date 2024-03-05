@@ -6,7 +6,6 @@ In `BoidWorld`, users can interact with virtual birds, or *Boids*, as they navig
 Through intuitive controls and realistic visuals, `BoidWorld` provides a platform for users to experiment with different parameters and observe the emergent properties of collective behavior.
 
 ---
-
 ### Instructions
 #### Step 1: Install dependencies
 ```
@@ -14,23 +13,14 @@ pip install -r requirements.txt
 ```
 
 
-#### Step 2: Go to `src` directory
+#### Step 2: Run program
 ```
-cd src
-```
-
-
-#### Step 3: Run program
-```
-python main.py
+python ./src/main.py
 ```
 
-<br>
-<br>
 <br>
 
 ---
-
 ### Summoner Controls
 - Press `w` key to move forward.     
 - Press `d` key to steer clockwise.     
