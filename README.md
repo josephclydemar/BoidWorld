@@ -3,7 +3,7 @@ Welcome to `BoidWorld`, where the fascinating dynamics of flocking behavior come
 
 In `BoidWorld`, users can interact with virtual birds, or *Boids*, as they navigate through dynamically changing environments. Witness firsthand the mesmerizing choreography of flocking, as Boids seamlessly adjust their flight paths based on simple rules of alignment, cohesion, and separation.
 
-Through intuitive controls and realistic visuals, `BoidWorld` provides a platform for users to experiment with different parameters and observe the emergent properties of collective behavior. Whether you're interested in studying the principles of complex systems or simply enjoy the beauty of nature-inspired simulations, `BoidWorld` offers a captivating and educational experience for enthusiasts of all ages.
+Through intuitive controls and realistic visuals, `BoidWorld` provides a platform for users to experiment with different parameters and observe the emergent properties of collective behavior.
 
 ---
 
@@ -23,4 +23,40 @@ cd src
 #### Step 3: Run program
 ```
 python main.py
+```
+
+<br>
+<br>
+<br>
+
+---
+
+### Summoner Controls
+- Press `w` key to move forward.     
+- Press `d` key to steer clockwise.     
+- Press `a` key to steer counter-clockwise.
+- Press `SPACE` key to speed up.
+- Press `q` key to summon Boids.
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+---
+
+<br>
+
+### Block Orientation
+```
+      1e
+ 0c _______ 1c
+   |       |
+0e |       | 2e
+   |_______|
+ 3c   3e    2c
+
 ```
