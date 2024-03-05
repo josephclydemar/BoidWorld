@@ -195,7 +195,13 @@ class Boid:
     
     # Align to the average direction/angle of other Boids that are within the alignment radius.
     def align(self):
-        pass
+        self.neigbors_within_alignment_radius = self.filter_neigbors_within_radius(self.neigbors_within_cohesion_radius, self.alignment_radius)
+        total_direction_degrees = 0
+        for neigbor in self.neigbors_within_alignment_radius:
+            total_direction_degrees += neigbor.direction_degrees
+        if len(self.neigbors_within_alignment_radius) != 0:
+            average_close_neigbors_direction = total_direction_degrees / len(self.neigbors_within_alignment_radius)
+            self.steer(average_close_neigbors_direction, steering_force=3)
 
     # Move away from other Boids that are too close.
     def separate(self):
