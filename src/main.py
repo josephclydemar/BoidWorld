@@ -1,8 +1,8 @@
 import random
 import pygame
 
-import boids
-import spawner
+import summoner
+import block
 
 pygame.init()
 pygame.display.set_caption('BoidWorld')
@@ -17,76 +17,51 @@ do_cohesion = False
 do_alignment = False
 
 if __name__ == '__main__':
-    mySpawner = spawner.Spawner(
+    myBlocks = (
+        block.Block((550, 550), (100, 100), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        block.Block((350, 450), (20, 500), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        # block.Block((150, 150), (50, 200), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        block.Block((760, 200), (800, 50), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        block.Block((1000, 400), (500, 10), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        block.Block((900, 620), (30, 250), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        block.Block((1200, 600), (30, 40), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        block.Block((420, 400), (30, 40), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+        
+        block.Block((1000, 600), (30, 40), (WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW, pygame),
+    )
+    # myBlocks = []
+    mySpawner = summoner.Summoner(
                             [random.randint(10, WINDOW_WIDTH-10), random.randint(10, WINDOW_HEIGHT-10)],
+                            myBlocks,
                             (WINDOW_WIDTH, WINDOW_HEIGHT),
                             WINDOW,
                             pygame
                         )
-    myBoids = boids.Boid.all_boids
+    # boids = mySpawner.myBoids
+
     run = True
     while run:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     run = False
-                
-                if event.key == pygame.K_o:
-                    for boid in myBoids:
-                        boid.do_cohesion = not(boid.do_cohesion)
-                if event.key == pygame.K_p:
-                    for boid in myBoids:
-                        boid.do_alignment = not(boid.do_alignment)
         
         WINDOW.fill((0, 0, 0))
 
-        boid_count_text = FONT.render(f'Boid Count: {len(myBoids)}', False, (255, 255, 255), (0, 0, 0))
-        fps_text = FONT.render(f'FPS: {CLOCK.get_fps()}', False, (255, 255, 255), (0, 0, 0))
+        boid_count_text = FONT.render(f'Boid Count: {len(mySpawner.myBoids)}', False, (255, 255, 255), (0, 0, 0))
+        fps_text = FONT.render(f'FPS: {round(CLOCK.get_fps(), 4)}', False, (255, 255, 255), (0, 0, 0))
 
-        my_key = pygame.key.get_pressed()
+        
         # my_pos = pygame.mouse.get_pos()
         # my_pos = (my_pos[0], WINDOW_HEIGHT-my_pos[1])
-        
-        for boid in myBoids:
-            boid.draw(CLOCK.get_fps())
-        mySpawner.draw()
-        
 
-        if my_key[pygame.K_q]:
-            boids.Boid(
-                        (mySpawner.position[0], mySpawner.position[1]), 
-                        mySpawner,
-                        (WINDOW_WIDTH, WINDOW_HEIGHT),
-                        WINDOW,
-                        pygame,
-                        show_circles=False
-                    )
-        if my_key[pygame.K_w]:
-            mySpawner.move()
-        if my_key[pygame.K_a]:
-            mySpawner.steer(7)
-        if my_key[pygame.K_d]:
-            mySpawner.steer(-7)
+        for blk in myBlocks:
+            blk.draw()
 
-        if my_key[pygame.K_SPACE]:
-            mySpawner.burst()
-        else:
-            mySpawner.relax()
+        mySpawner.draw(CLOCK.get_fps())
         
-
-        # if my_key[pygame.K_o]:
-        #     for boid in myBoids:
-        #         boid.do_cohesion = not(boid.do_cohesion)
-        # if my_key[pygame.K_p]:
-        #     for boid in myBoids:
-        #         boid.do_alignment = not(boid.do_alignment)
-        
-        
-        
-
-        WINDOW.blit(boid_count_text, (10, 10))
-        WINDOW.blit(fps_text, (10, 40))
-
+        WINDOW.blit(boid_count_text, (WINDOW_WIDTH - 150, WINDOW_HEIGHT - 60))
+        WINDOW.blit(fps_text, (WINDOW_WIDTH - 150, WINDOW_HEIGHT - 40))
 
         pygame.display.update()
         CLOCK.tick(60)
