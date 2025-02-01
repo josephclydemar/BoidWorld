@@ -1,11 +1,8 @@
 # BoidWorld
-Welcome to `BoidWorld`, where the fascinating dynamics of flocking behavior come to life in an immersive flight simulation experience. `BoidWorld` is an innovative project that allows users to explore the mesmerizing patterns and interactions observed in bird flocks and other collective animal behaviors.
+Visualizes the collective movement of agents (boids) following simple rules to mimic natural flocking behavior. Each boid follows three rules: separation (avoiding crowding neighbors), alignment (matching velocity with nearby boids), and cohesion (steering towards the group’s center). The simulation dynamically adjusts to changing environments, creating emergent, lifelike swarm behavior.
 
-In `BoidWorld`, users can interact with virtual birds, or *Boids*, as they navigate through dynamically changing environments. Witness firsthand the mesmerizing choreography of flocking, as Boids seamlessly adjust their flight paths based on simple rules of alignment, cohesion, and separation.
+<br>
 
-Through intuitive controls and realistic visuals, `BoidWorld` provides a platform for users to experiment with different parameters and observe the emergent properties of collective behavior.
-
----
 ### Instructions
 #### Step 1: Install dependencies
 ```
